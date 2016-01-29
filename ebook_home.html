@@ -1,0 +1,91 @@
+<!-- AndrewG8460 Jan 16- eBook home that allows the user to see all existing eBooks in the etailer website-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>	
+	<link href= "css/site.css" rel="stylesheet"/>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">	</script>
+	<script type="text/javascript">
+	/* <![CDATA[ */
+		function getBooks() {
+			/* Script to call userHome.php with userID using jQuery and print the response as a table in div books
+			 * https://www.html5andbeyond.com/jquery-ajax-json-php/
+			 * http://labs.jonsuh.com/jquery-ajax-php-json/
+			 * http://api.jquery.com/jquery.post/
+			 */
+			var customer = '<?php echo $_SESSION["customerid"]; ?>';
+			//Posts the customer id session into ebookHome.php
+			
+			$.post("http://andrewg8460.ccacolchester.com/eBook%20Site/ebookHome.php", 
+				{
+					customerid: customer
+				},
+				function (data, status){
+					//Initialises the output variable
+					var out = "<table border = '1.5'><tr><th>SIN</th><th>Title</th><th>Genre</th><th>Publisher</th><th>Publication Date</th></tr>";
+					
+					//Prints out the table values as long as there is data in the JSON ebook home array
+					for(i = 0; i < data.length; i++) {
+						out += "<tr><td>" +
+						data[i].sin +
+						"</td><td>" +
+						data[i].title +
+						"</td><td>" +
+						data[i].genre +
+						"</td><td>" +
+						data[i].publisher +
+						"</td><td>" +
+						data[i].publicationdate +
+						"</td></tr>";
+					}
+					out += "</table>";
+					
+					//Prints out the table in the books id tag
+					document.getElementById("books").innerHTML = out;
+				}
+			);
+		};
+	/* ]]> */
+	</script>
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	//Function to print out a slideshow showing eBook images
+	$(document).ready(function()
+	{
+		$('img.gt(0)').hide();
+		setInterval(function()	{
+		$(".img:first-child").fadeOut(3000).next(".img").fadeIn(3000).end().appendTo("#slideshow")
+		}, 4000);
+	}); //end slideshow
+	/* ]]> */
+	</script>
+	<title>eBook Book List</title>
+</head>
+<body onload="javascript:getBooks()">
+	<h1>eBook Home</h1>
+
+	<h2>Available eBooks:</h2>
+	
+	<div id="slideshow">
+		<img class="img" src="img/HaloLastLight.jpg" alt="Halo Last Light">
+		<img class="img" src="img/PHP.png" alt="PHP">
+	</div>
+	
+	<div id="books">
+	</div>
+	<p>
+		<a class="btn btn-info btn-sm" href='ebook_home.html'>Home</a>  
+		<a class="btn btn-info btn-sm" href="search.html">Search for an eBook</a> 
+		<a class="btn btn-info btn-sm" href='ebook_rating_view.html'>View an eBook Rating</a>
+		<a class="btn btn-info btn-sm" href='ebook_account.html'>Account Login</a>
+	</p>	
+	
+	<div id="footer">
+		<hr class="highlight" />
+		<p>Copyright &copy; 2015 eBook Website</p>
+	</div>
+</body>
+</html>
