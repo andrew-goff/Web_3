@@ -1,0 +1,85 @@
+@charset UTF-8;
+
+body
+{
+	font-family: Ubuntu, sans-serif; 
+	text-align: left;
+	font-size: 12px;
+	background-color: #BA5656;
+	color: #96bf56;
+}
+
+h1
+{
+	padding: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: left;
+	font-size: 24px;
+	font-style: italic;
+	background-color: #96bf56;
+	color: #BA5656;
+	margin-bottom: .5em;
+}
+
+h2
+{
+	padding: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: left;
+	font-size: 16px;
+	font-style: bold;
+	background-color: #96bf56;
+	color: #BA5656;
+	margin-bottom: .5em;
+}
+
+p{
+	font-family: Ubuntu, sans-serif; 
+	font-size: 11px;
+	background-color: #96bf56;
+	color: red;
+}
+
+table, th, td{
+	text-align: center;
+	padding: 0.5em;
+	border: 2px solid black;
+	font-weight: bold;
+	font-size: 14px;
+	border-color: #660099;
+	background-color:  #99CC33;
+	color:  #660099;
+}
+
+img
+{
+	position: absolute;
+	height: 300px;
+	width: 300px;
+}
+
+#slideshow
+{
+	box-shadow: 2px 2px 5px 2px #356d0d;
+	border-radius: 10px;
+	height: 300px;
+	margin: 5px auto;
+	width: 300px;
+}
+
+#content table, #content td, #content th, #content tr
+{
+	border: 2px solid black;
+	padding: 0.5em;
+	text-align: center;
+	border-color: green;
+	background-color: green;
+	color: yellow;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#footer
+{
+	background-color : #96bf56;
+}
