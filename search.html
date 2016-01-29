@@ -1,0 +1,108 @@
+<!-- AndrewG8460 Jan 16- eBook Search that allows customer to select a search criteria and view all existing eBook searches. Also user can add eBook to basket from Search and view current basket-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>	
+	<link href= "css/site.css" rel="stylesheet"/>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">	</script> 
+	<script type="text/javascript">
+	/* <![CDATA[ */
+		function getSearches() {
+			var	titleVal = document.getElementById("title").value;
+			var	authorVal = document.getElementById("author").value;
+			var	genreVal = document.getElementById("genre").value;
+			var	publisherVal = document.getElementById("publisher").value;
+			var	priceVal = document.getElementById("price").value;
+			var	formatVal = document.getElementById("format").value;
+			//Posts the variables from the form field to Search.php
+			
+			$.post("http://andrewg8460.ccacolchester.com/eBook%20Site/Search.php", 
+			{
+				title: titleVal,
+				author: authorVal,
+				genre: genreVal,
+				publisher: publisherVal,
+				price: priceVal,
+				format: formatVal
+			},
+			function (data, status){
+				//Initialises the output variable with a message in case data length is equal to 0
+				var out = "<p>No books match that search.</p>"
+				//Checks to make sure the data length is greater than 0
+				
+				if(data.length > 0)
+				{
+					out = "<table border = '1.5'><th>SIN</th><th>Title</th><th>Authorid</th><th>Synopsis</th><th>Author</th><th>Genre</th><th>Publisher</th><th>Price</th><th>Format</th><th></th><th></th></tr>";
+					//Prints out the table values as long as there is data in the JSON search array 
+					
+					for(i = 0; i < data.length; i++)
+					{
+						out += "<tr><td>" + data[i].sin + "</td><td>"
+						+ data[i].title + "</td><td>"
+						+ data[i].authorid + "</td><td>"
+						+ data[i].synopsis + "</td><td>" 
+						+ data[i].author + "</td><td>" 
+						+ data[i].genre + "</td><td>" 
+						+ data[i].publisher + "</td><td>"
+						+ "&pound" + data[i].price + "</td><td>" 
+						+ data[i].format  
+						+ "</td><td><form id=\"basketAdd"+i+"\"  method=\"post\" action=\"basket_add.php\"><input type=\"hidden\" name=\"sin\" value=\"" + data[i].sin + "\"><input type=\"submit\" class=\"btn btn-info btn-sm\" value=\"Add to Basket\"></form>" 
+						+ "</td><td><form id=\"readReviews"+i+"\"  method=\"post\" action=\"read_review.php\"><input type=\"hidden\" name=\"sin\" value=\"" + data[i].sin + "\"><input type=\"submit\" class=\"btn btn-info btn-sm\" value=\"Read Reviews\"></form></td></tr>";
+					}
+					
+					out += "</th></table>";
+				}
+				
+				//Prints out the table in the results id tag
+				document.getElementById("results").innerHTML = out;
+			}
+			);
+		}
+	/* ]]> */
+	</script>
+	<title>eBook Search Query</title>
+</head>
+<body>
+	<div>
+		<h1>Criteria</h1>
+
+		<form name="Search" action="javascript:getSearches()">
+			<table>
+			<tr><td>Book Title:</td></tr>
+			<tr><td><input type="text" id="title" name="title"></td></tr>
+			<tr><td>Author Name:</td></tr>
+			<tr><td><input type="text" id="author" name="author"></td></tr>
+			<tr><td>Genre:</td></tr>
+			<tr><td><input type="text" id="genre" name="genre"></td></tr>
+			<tr><td>Publisher:</td></tr>
+			<tr><td><input type="text" id="publisher" name="publisher"></td></tr>
+			<tr><td>Price:</td></tr>
+			<tr><td><input type="text" id="price" name="price"></td></tr>
+			<tr><td>Format:</td></tr>
+			<tr><td><input type="text" id="format" name="format"></td></tr>
+			<tr><td><input type="submit" class="btn btn-info btn-sm" value="Search for Book"></td></tr>
+			<tr><td><input type="submit" class="btn btn-info btn-sm" value="View Basket" formaction="basket.html"></td></tr>
+			</table>
+		</form>
+	</div>
+
+	<h3>Search Result:</h3>
+	
+	<div id="results">
+	</div>
+	
+	<p>	
+		<a class="btn btn-info btn-sm" href='ebook_home.html'>Home</a>  
+		<a class="btn btn-info btn-sm" href='ebook_rating_view.html'>View an eBook Rating</a>
+		<a class="btn btn-info btn-sm" href='ebook_account.html'>Account Login</a>
+	</p>
+	
+	<div id="footer">
+		<hr class="highlight" />
+		<p>Copyright &copy; 2015 eBook Website</p>
+	</div>
+</body>
+</html>
