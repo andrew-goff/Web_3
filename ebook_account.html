@@ -1,0 +1,48 @@
+<!-- AndrewG8460 Jan 16- eBook account allows the user to either register an author or customer account or login to existing account by taking the user to the relevant pages on button click-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>	
+	<link href= "../eBook%20Site/css/site.css" rel="stylesheet"/>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+	<script type="text/javascript" src="../eBook%20Site/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">	</script>
+	<title>eBook Accounts</title>
+</head>
+
+<body>
+	<h1>eBook Account:</h1>
+	
+	<h2>eBook Customer Account Login:</h2>
+	<form action="http://andrewg8460.ccacolchester.com/eBook%20Site/customer_login.php" method="POST">
+	<input type="submit" class="btn btn-info btn-sm" value="Login as a Customer">
+	</form>
+	
+	<h2>eBook Author Account Login:</h2>
+	<form action="http://andrewg8460.ccacolchester.com/eBook%20Site/author_login.php" method="POST">
+	<input type="submit" class="btn btn-info btn-sm" value="Login as a Author">
+	</form>
+	
+	<h2>eBook Customer Account Register:</h2>
+	<form action="http://andrewg8460.ccacolchester.com/eBook%20Site/customer_register.html" method="POST">
+	<input type="submit" class="btn btn-info btn-sm" value="Register as a Customer">
+	</form>
+	
+	<h2>eBook Author Account Register:</h2>
+	<form action="http://andrewg8460.ccacolchester.com/eBook%20Site/author_register.html" method="POST">
+	<input type="submit" class="btn btn-info btn-sm" value="Register as a Author">
+	</form>
+	
+	<p>	
+		<a class="btn btn-info btn-sm" href='ebook_home.html'>Home</a>  
+		<a class="btn btn-info btn-sm" href='search.html'>Search</a> 
+		<a class="btn btn-info btn-sm" href='ebook_rating_view.html'>View an eBook Rating</a>
+	</p>
+	
+	<div id="footer">
+		<hr class="highlight" />
+		<p>Copyright &copy; 2015 eBook Website</p>
+	</div>
+</body>
+</html>
