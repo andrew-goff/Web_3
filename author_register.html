@@ -1,0 +1,74 @@
+<!-- AndrewG8460 Jan 16- User is able to register as a author and create a account and go to the author login page-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>	
+	<link href= "css/site.css" rel="stylesheet"/>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">	</script> 
+	<script type="text/javascript">
+	/* <![CDATA[ */
+		function getAuthorresults() {
+		/* Script to call userHome.php with userID using jQuery and print the response as a table in div books
+		 * https://www.html5andbeyond.com/jquery-ajax-json-php/
+		 * http://labs.jonsuh.com/jquery-ajax-php-json/
+		 * http://api.jquery.com/jquery.post/
+		*/
+		
+		var	authorfirstnameVal = document.getElementById("authorfirstname").value;
+		var	authorlastnameVal = document.getElementById("authorlastname").value;
+		var	authoremailVal = document.getElementById("authoremail").value;
+		var	authorpasswordVal = document.getElementById("authorpassword").value;
+		//Posts the variables from the form fields to author_Handler.php
+		$.post("http://andrewg8460.ccacolchester.com/eBook%20Site/author_Handler.php",
+		{
+			authorfirstname: authorfirstnameVal,
+			authorlastname: authorlastnameVal,
+			authoremail: authoremailVal,
+			authorpassword: authorpasswordVal
+		},
+		function (data, status){
+		
+			var out = "<div>";
+			//Prints out a registration confirmation as long as the JSON array contains author data and brings up a button for author login
+			for(i = 0; i < data.length; i++)
+			{
+				out+= "<p>" + data[i].firstname + data[i].firstname + "<h1>You are registered</h1> You are now registered as an Author.</p>";
+			}
+			out += "</div>";
+			document.getElementById("register").innerHTML = out;
+			document.getElementById("registerLink").innerHTML = '<a class="btn btn-info btn-sm" href="author_login.php">Login</a></p>';
+		}
+		);
+	}
+	/* ]]> */
+	</script>
+	<title></title>
+</head>
+<body>	
+	<h1>Author Register</h1>
+	
+	<form name="Register Author" action="javascript:getAuthorresults()">
+		<table>
+		<tr><td>Author First Name:<input type="text" id="authorfirstname" name="authorfirstname"></tr></td>
+		<tr><td>Author Last Name:<input type="text" id="authorlastname" name="authorlastname"></tr></td>
+		<tr><td>Author Email Address:<input type="text" id="authoremail" name="authoremail"></tr></td>
+		<tr><td>Password:<input type="password" id="authorpassword" name="authorpassword"></tr></td>
+		<tr><td><input type="submit" class="btn btn-info btn-sm" value="Register author"></tr></td>
+		</table>		
+	</form>
+	
+	<div id="register">
+	</div>
+	
+	<div id="registerLink">
+	</div>
+	
+	<div id="footer">
+		<hr class="highlight" />
+		<p>Copyright &copy; 2015 eBook Website</p>
+	</div>
+</body>
+</html>
