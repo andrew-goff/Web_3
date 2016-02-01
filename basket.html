@@ -1,0 +1,94 @@
+<!-- AndrewG8460 Jan 16- eBook Basket that allows user to add eBook item to basket and view current selection on screen. User is also able to remove eBook from the basket and click on buy to register as a customer and give credit card details-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>	
+	<link href= "css/site.css" rel="stylesheet"/>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">	</script> 
+	<script type="text/javascript">
+	/* <![CDATA[ */
+		function getBaskets() {
+			/* Script to call userHome.php with userID using jQuery and print the response as a table in div books
+			 * https://www.html5andbeyond.com/jquery-ajax-json-php/
+			 * http://labs.jonsuh.com/jquery-ajax-php-json/
+			 * http://api.jquery.com/jquery.post/
+			*/
+			
+			$.post("http://andrewg8460.ccacolchester.com/eBook%20Site/basket.php",
+				{ 
+					
+				},
+				function (data, status){
+					//Initialises the output variable
+					var out = "";
+
+					if (data.length > 0) {
+					//Initialises the total and subtotal variables
+						var total = 0;
+						var subtotal = 0;
+
+						out = "<h2>Items in Basket</h2><table border='1.5'><tr><th>Payment Id</th><th>Remove Basket Item</th><th>SIN</th><th>Title</th><th>Amount Due</th><th>Subtotal</th><th>URL</th>";
+						//Prints out the table values as long as there is data in the JSON basket array 
+						
+						for(i = 0; i < data.length; i++) {
+							total += data[i].amountdue;
+							subtotal = data[i].amountdue;
+							out+= "<tr><td>" + data[i].paymentid + "</td><td>"
+							+ "<form id=\"basketRemove\"" + i + " method=\"post\" action=\"http://andrewg8460.ccacolchester.com/eBook%20Site/basket_remove.php\"><input type=\"submit\" class=\"btn btn-info btn-sm\" value=\"Remove from Basket\">" 
+							+ "<input type=\"hidden\" name=\"paymentid\"" + i + " value=\"" + data[i].paymentid + "\">" 
+							+ "<input type=\"hidden\" name=\"sin\"" + i + " value=\"" + data[i].sin + "\"></form></td><td>" 
+							+ data[i].sin + "</td><td>" 
+							+ data[i].title + "</td><td> &pound;" 
+							+ data[i].amountdue + "</td><td> &pound;"  
+							+ subtotal + "</td><td>"  
+							+ (data[i].url ? data[i].url : "") + "</td></tr>";
+						}
+
+						out += "<tr><td>Total:</td><td colspan='12' style='text-align:center'>&pound;" + total + "</td></tr>";
+
+						out += "</table>";
+					}
+					//Prints out the table in the basket id tag
+					document.getElementById("basket").innerHTML = out;
+				}
+			//Function to declare failure to get item into basket and bring up message statement
+			).fail(function() {
+				document.getElementById("basket").innerHTML =  "<p>There are currently no items in your basket.</p>" ;
+			});
+		}
+		
+		function getSessionId() {
+				$.post("http://andrewg8460.ccacolchester.com/eBook%20Site/session_id.php",
+				{ 
+					
+				},
+				function (data, status){
+					alert(data);
+				});
+				
+			}
+	/* ]]> */
+	</script>
+	<title>Basket</title>
+</head>
+<body onload="javascript:getBaskets()">
+	<h1>Basket</h1>
+
+	<div id="basket">
+	</div>
+	
+	<p>	
+		<a class="btn btn-info btn-sm" href='ebook_home.html'>Home</a>  
+		<a class="btn btn-info btn-sm" href='search.html'>Search</a> 
+		<a class="btn btn-info btn-sm" href='http://andrewg8460.ccacolchester.com/eBook%20Site/paymentdetailsform.php'>Buy</a>
+	</p>
+
+	<div id="footer">
+		<hr class="highlight" />
+		<p>Copyright &copy; 2015 eBook Website</p>
+	</div>
+</body>
+</html>
