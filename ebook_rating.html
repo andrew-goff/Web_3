@@ -1,0 +1,94 @@
+<!-- AndrewG8460 Jan 16- eBook rating that allows the customer to add a ebook rating review to an existing eBook and then return to customer home-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>	
+	<link href= "css/site.css" rel="stylesheet"/>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">	</script> 
+	<script type="text/javascript">
+	/* <![CDATA[ */
+		function getBooksReview(){
+			var customer = '<?php echo $_SESSION["customerid"]; ?>';
+			var heading = document.getElementById("bookheading").value;
+			var rating = document.getElementById("bookrating").value;
+			var comments = document.getElementById("bookcomments").value;
+			
+			//Posts the variables from the form field to ratingAction.php
+			$.post("http://andrewg8460.ccacolchester.com/eBook%20Site/ratingAction.php",
+				{
+					customerid: customer,
+					bookheading: heading,
+					bookrating: rating,
+					bookcomments: comments
+				},
+				function (data, status){
+					//Initialise the output variable with an error message
+					var out = '<h1>Error!</h1><p id="err_msg">There was a problem. <br></p>';
+					//Checks to make sure the data length is greater than 0
+				
+					if (data.length > 0){
+				
+						out = "<table border='1.5'><tr><th>Customerid</th><th>Title</th><th>Comments</th><th>Rating</th><th>reviewdate</th></tr>";
+
+						//Prints out the table values as long as there is data in the JSON ebook rating array
+						for(i = 0; i < data.length; i++) {
+							out += "<tr><td>" + data[i].customerid + 
+							"</td><td>" +
+							data[i].bookheading + 
+							"</td><td>" +
+							data[i].bookcomments + 
+							"</td><td>" +
+							data[i].bookrating + 
+							"</td><td>" +
+							data[i].reviewdate + 
+							"</td></tr>";
+						}
+					
+						out += "</th></table>";
+						out += "<h1>Review completed!</h1>" + "<p>Thanks for the book review!</p>" 
+						+ "<p>Your book review is appreciated.</p><p>" + "<a class='btn btn-info btn-sm' href='customer_home.php'>Home</a></p>";
+					}
+					//Prints out the table in the raingAdded tag
+					document.getElementById("ratingAdded").innerHTML = out;
+				}
+			);
+		}
+	/* ]]> */
+	</script>
+	<title>Add eBook Rating</title>
+</head>
+<body>
+	<h1>Reviews</h1>
+	
+	<form name="Add eBook rating form" action="javascript:getBooksReview()">
+	<table>
+		<tr><td>Book Heading:</td></tr>
+		<tr><td><input type="text" id="bookheading" name="bookheading"></td></tr>
+		<tr><td>Book Rating:</td></tr>
+		<tr><td><input type="number" min="1" max="5" id="bookrating" name="bookrating"></td></tr>
+		<tr><td>Book Comments:</td></tr>
+		<tr><td><textarea rows="5" cols="20" id="bookcomments" name="bookcomments"></textarea></td></tr>
+		<tr><td><input type="submit" class="btn btn-info btn-sm" value="eBook Rating"></td></tr>	
+	</table>
+	</form>
+	
+	<h3>Completed Review</h3>
+	
+	<div id="ratingAdded">
+	</div>
+	
+	<p>	
+		<a class="btn btn-info btn-sm" href='ebook_home.html'>Home</a>  
+		<a class="btn btn-info btn-sm" href='search.html'>Search</a> 
+		<a class="btn btn-info btn-sm" href='ebook_rating_view.html'>View an eBook</a>
+	</p>
+	
+	<div id="footer">
+		<hr class="highlight" />
+		<p>Copyright &copy; 2015 eBook Website</p>
+	</div>
+</body>
+</html>
