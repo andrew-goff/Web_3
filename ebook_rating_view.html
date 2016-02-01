@@ -1,0 +1,83 @@
+<!-- AndrewG8460 Jan 16- eBook rating view that allows the user to see all existing eBook reviews and see the ratings of them-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>	
+	<link href= "css/site.css" rel="stylesheet"/>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">	</script> 
+	<script type="text/javascript">
+	/* <![CDATA[ */
+		function getRating() {
+			/* Script to call userHome.php with userID using jQuery and print the response as a table in div books
+			 * https://www.html5andbeyond.com/jquery-ajax-json-php/
+			 * http://labs.jonsuh.com/jquery-ajax-php-json/
+			 * http://api.jquery.com/jquery.post/
+			 */
+			
+			$.post("http://andrewg8460.ccacolchester.com/eBook%20Site/eBook_Rating_view.php", 
+				{
+					
+				},
+				function (data, status){
+					//Initialise the output variable with table heading names
+					var out = "<table border='1.5'> <tr><th>Name</th><th>Title</th><th>Comments</th><th>Rating</th><th>Date</th></tr>";
+					
+					//Prints out the table values as long as there is data in the JSON ebook rating view array 
+					for(i = 0; i < data.length; i++) {
+						out += "<tr><td>" + data[i].customerid + 
+						"</td><td>" +
+						data[i].bookheading + 
+						"</td><td>" + 
+						data[i].bookcomments + 
+						"</td><td>" + 
+						data[i].bookrating + 
+						"</td><td>" + 
+						data[i].reviewdate + 
+						"</td></tr>";
+					}
+					//Prints out the table in the rating id tag
+					out += "</table>";
+					document.getElementById("rating").innerHTML = out;
+					
+				}
+			);	
+		}
+	/* ]]> */
+	</script>
+	<script type="text/javascript">
+	function setLinks() {
+	var customer = '<?php echo $_SESSION["customerid"]; ?>';
+		
+		if(customer == null)
+		{
+			document.getElementById("links").innerHTML = '<a class="btn btn-info btn-sm" href="customer_register.html">Register as a customer</a>'; 
+			document.getElementById("links").innerHTML = '<a class="btn btn-info btn-sm" href="author_register.html">Register as a author</a>';
+		}
+	}
+	</script>
+	<title>eBook Rating List</title>
+</head>
+<body onload="javascript:getRating()">
+	<h1>eBook Review</h1>
+	<h3>eBook Rating Results:</h3>
+	
+	<div id="rating">
+	</div>
+	
+	<div id="links">
+	</div>
+	
+	<p>	
+		<a class="btn btn-info btn-sm" href='ebook_home.html'>Home</a>  
+		<a class="btn btn-info btn-sm" href='search.html'>Search</a> 
+		<a class="btn btn-info btn-sm" href='ebook_account.html'>Account Login</a>
+	</p>
+	<div id="footer">
+		<hr class="highlight" />
+		<p>Copyright &copy; 2015 eBook Website</p>
+	</div>
+</body>
+</html>
