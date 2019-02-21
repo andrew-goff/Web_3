@@ -1,16 +1,36 @@
 <?php	
+	header("Access-Control-Allow-Origin: http://andrewg8460.ccacolchester.com");
+	header("Access-Control-Allow-Methods: POST");
+	header("Content-Type: application/json; charset=UTF-8");
 	session_start();
-	
-	$page_title = 'eBook Search Results';
-	
-	include('includes/header.html');
 
-	echo "<h1>eBook Results</h1>";
-
+	class Search {
+		var $title;
+		var $sin;
+		var $authorid;
+		var $synopsis;
+		var $author;
+		var $genre;
+		var $publisher;
+		var $price;
+		var $format;
+		
+		function Search($title, $sin, $authorid, $synopsis, $author, $genre, $publisher, $price, $format) {
+			$this->title = $title;
+			$this->sin = $sin;
+			$this->authorid = $authorid;
+			$this->synopsis = $synopsis;
+			$this->author = $author;
+			$this->genre = $genre;
+			$this->publisher = $publisher;
+			$this->price = $price;
+			$this->format = $format;
+		}
+	};
+	
+	require('cross_site_scripting.php');
 	require('db_connect.php');
-	/*PHP test to check that eBook data is being selected from the MySQL database */
-	$sql = "SELECT title, sin, authorid, synopsis, author, genre, publisher, price, format, publicationdate FROM eBook";	
-
+	
 	/*Tests to check whether there is data in search fields  */
 	if(!empty ($_POST['title']))
 	{
@@ -69,58 +89,30 @@
 
 	if ($clause)
 	{
-		$clause = $sql = $sql .  " WHERE " . $clause;
+		$clause = " WHERE " . $clause;
 	}
 	
-	echo '<table border = "1.5"><tr>';
-	/*PHP test to search for all eBooks by title in the MySQL database */
-	$ra = mysqli_query($db, $sql);
+	/*PHP test to check that eBook data is being selected and search for all eBooks by title from the MySQL database */
+	$sql = "SELECT title, sin, authorid, synopsis, author, genre, publisher, price, format FROM eBook" . $clause;
+	$r = mysqli_query($db, $sql);
+
+	$Searches = array();
 	
-	if ($ra)
+	if ($r)
 	{			
-		echo "<h3>Search Result:</h3>";
-			
-		$num = mysqli_num_rows($ra);
 		/*Check to make sure that there are more than 0 rows and display row results*/	
-		if ($num > 0 )
-		{
-			while ($row = mysqli_fetch_array ($ra, MYSQL_ASSOC))
+		if ( mysqli_num_rows ($r) > 0 )
+		{			
+			/*Table to be printed out showing a list of all eBooks searched*/
+			while ($row = mysqli_fetch_array ($r, MYSQL_ASSOC))
 			{
-				echo "<tr><td>" . $row['title'] . "</td></tr>";
-				echo "<tr><td>" . $row['sin'] . "</td></tr>";
-				echo "<tr><td>" . $row['authorid'] . "</td></tr>"; 
-				echo "<tr><td>" . $row['synopsis'] . "</td>"; 
-				echo "<tr><td>" . $row['author'] . "</td></tr>"; 
-				echo "<tr><td>" . $row['genre'] . "</td></tr>";
-				echo "<tr><td>" . $row['publisher'] . "</td></tr>";
-				echo "<tr><td>" . "&pound" . $row['price'] . "</td></tr>";
-				echo "<tr><td>" . $row['format'] . "</td></tr>";
-				echo "<tr><td>" . $row['publicationdate'] . "</td></tr>"; 
-				echo "<tr><td><form id =\"basketAdd\"  method=\"post\" action=\"basket_add.php\">";
-				echo "<input type=\"hidden\" name=\"sin\" value=\"{$row['sin']}\">";
-				echo "<input type=\"submit\" value=\"Add to Basket\"></form></td></tr>";	
-				echo "<tr><td><form id =\"readReviews\"  method=\"post\" action=\"read_review.php\">";
-				echo "<input type=\"hidden\" name=\"sin\" value=\"{$row['sin']}\">";
-				echo "<input type=\"submit\" value=\"Read Reviews\"></form></td></tr>";	
+				$Search = new Search($row['title'], $row['sin'], $row['authorid'], $row['synopsis'], $row['author'], $row['genre'], $row['publisher'], $row['price'], $row['format']);
+				array_push($Searches, $Search);
 			}		
 		}
-		
-		/*Statement to displayed showing no books found in search */
-		else
-		{
-			echo "<p>No books match that search.</p>";
-		}
 	}
-	else
-	{
-		'<p>' . mysqli_error($db) . '</p>';
-	}
-		
-	echo '</tr></table>';
 	
-	echo '<p><a href="ebook_search.php">Search for an eBook</a></p>';
-
 	mysqli_close($db);
 
-	include('includes/footer.html');
+	echo json_encode($Searches);
 ?>

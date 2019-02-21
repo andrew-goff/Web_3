@@ -1,43 +1,47 @@
 <?php
-	session_start();
-	/*Check to make sure customer is logged in and customer id is stored in session */
-	if(!isset($_SESSION['customerid']))
-	{
-		require('customerlogin_tool.php');
-		load();
-	}
-	$customerid = $_SESSION['customerid'];
-	include('includes/header.html');
+	header("Access-Control-Allow-Origin: http://andrewg8460.ccacolchester.com");
+	header("Access-Control-Allow-Methods: POST");
+	header("Content-Type: application/json; charset=UTF-8");
 	
+	class BookReview {
+		var $customerid;
+		var $bookheading;
+		var $bookcomments;
+		var $bookrating;
+		var $reviewdate;
+		
+		function BookReview($customerid, $bookheading, $bookcomments, $bookrating, $reviewdate) {
+			$this->customerid = $customerid;
+			$this->bookheading = $bookheading;
+			$this->bookcomments = $bookcomments;
+			$this->bookrating = $bookrating;
+			$this->reviewdate = $reviewdate;
+		}
+	
+	};
+	
+	require('cross_site_scripting.php');
 	require('db_connect.php');
-	
+
 	/*PHP test to search for all reviews by customerid in the MySQL database */
-	$sql = "SELECT customerid, bookheading, bookcomments, bookrating, reviewdate FROM Review";
+	$sql = "SELECT c.customerfirstname AS firstname, r.bookheading AS bookheading, r.bookcomments AS bookcomments, r.bookrating AS bookrating, r.reviewdate AS reviewdate FROM Review r INNER JOIN eBook_Customer c ON r.customerId = c.customerid";
 	$r = mysqli_query($db, $sql);
+	$eBooksReview = array();
 	
-	if($r)
+	if ($r)
 	{
-		echo "<h3>eBook Rating Results:</h3>";
-		
-		echo "<table border='1.5'>";
-		$num = mysqli_num_rows($r);
-		
-		/*Test to make sure if number of rows is greater than zero then the rows are printed out */
-		if ($num > 0 )
-		{
+		if( mysqli_num_rows($r) > 0 )
+		{		
 			while ($row = mysqli_fetch_array($r, MYSQLI_ASSOC))
 			{
-			    echo "<tr><td>'{$row['customerid']}'</td></tr>";
-				echo "<tr><td>" . $row['bookheading'] . "</td></tr>";
-				echo "<tr><td>" . $row['bookcomments'] . "</td></tr>";
-				echo "<tr><td>" . $row['bookrating'] . "</td></tr>";
-				echo "<tr><td>" . $row['reviewdate'] . "</td></tr>";
+				$eBookReview = new BookReview($row['firstname'], $row['bookheading'], $row['bookcomments'], $row['bookrating'], $row['reviewdate']);
+				array_push($eBooksReview, $eBookReview);
 			}
+			
 		}
-		
-		echo "</table>";
 	}
 	
-	echo "<p><a href='customer_home.php'>Home</a> | <a href='ebook_search.php'>Search</a> | <a href='ebook_rating.php'>Review an eBook</a></p>";
-	include('includes/footer.html');
+	mysqli_close($db);
+	
+	echo json_encode($eBooksReview);
 ?>
